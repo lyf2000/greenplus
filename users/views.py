@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
+from django.views.generic import DetailView
 
 from users.forms import SignupForm, PasswordRestForm, SetPasswordForm, SignInForm, UserChangeForm
 from users.models import User
@@ -106,8 +107,8 @@ def change_user(request):
     if request.method == 'POST':
         user = UserChangeForm(request.POST, request.FILES, instance=request.user)
         if user.is_valid():
-            user.save()
-            # redirect(reverse())
+            user = user.save()
+            return  redirect(reverse('users:user-detail', args=[user.pk]))
         else:
             return render(request, 'users/user-change.html', {'form': user})
     user = request.user
@@ -116,3 +117,8 @@ def change_user(request):
         'email': user.email
     })
     return render(request, 'users/user-change.html', {'form': form})
+
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'users/user-detail.html'

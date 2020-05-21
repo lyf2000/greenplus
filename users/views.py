@@ -102,3 +102,17 @@ class PasswordResetCompleteView(passwordResetCompleteView):
     template_name = 'users/password_reset_complete.html'
 
 
+def change_user(request):
+    if request.method == 'POST':
+        user = UserChangeForm(request.POST, request.FILES, instance=request.user)
+        if user.is_valid():
+            user.save()
+            # redirect(reverse())
+        else:
+            return render(request, 'users/user-change.html', {'form': user})
+    user = request.user
+    form = UserChangeForm(initial={
+        'username': user.username,
+        'email': user.email
+    })
+    return render(request, 'users/user-change.html', {'form': form})

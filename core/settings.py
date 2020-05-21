@@ -17,6 +17,8 @@ from datetime import timedelta
 
 from celery.schedules import crontab
 from django.urls import reverse_lazy
+import dj_database_url
+import django_heroku
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -65,6 +67,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -208,3 +211,8 @@ CELERY_BEAT_SCHEDULE = {
     #      'schedule': crontab(minute='*'),
     #     },
 }
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+django_heroku.settings(locals())

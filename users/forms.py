@@ -8,10 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 from django.contrib.auth import password_validation
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm as setPasswordForm, \
-    AuthenticationForm
+    AuthenticationForm, UserChangeForm as userChangeForm
 
 from users.models import User
-
 
 # class UserCreationForm(forms.ModelForm):
 #     error_messages = {
@@ -63,12 +62,9 @@ from users.models import User
 #         return self.initial["password"]
 from users.tasks import send_reset_email
 
-class AdminUserCreate(UserCreationForm):
-    email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
-
-
 
 class SignupForm(UserCreationForm):
+    avatar = forms.FileField(required=False, label=_('Avatar'), help_text=_('Avatar image'))
     email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
     password1 = forms.CharField(
         # label=_("Password"),
@@ -85,7 +81,7 @@ class SignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2', 'avatar')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -93,8 +89,9 @@ class SignupForm(UserCreationForm):
         self.helper.form_show_labels = True
         self.helper.layout = Layout(
             Row(
-                Column('username', css_class='form-group col-md-6 mb-0'),
-                Column('email', css_class='form-group col-md-6 mb-0'),
+                Column('username', css_class='form-group col-md-5 mb-0'),
+                Column('email', css_class='form-group col-md-5 mb-0'),
+                Column('avatar', css_class='form-group col-md-2 mb-0'),
                 css_class='form-row'
             ),
             Row(
@@ -113,7 +110,7 @@ class SignupForm(UserCreationForm):
 class PasswordRestForm(PasswordResetForm):
     email = forms.CharField(
         widget=forms.EmailInput(attrs={'placeholder': 'Email'}),
-        help_text=_("Enter email"),)
+        help_text=_("Enter email"), )
 
     def __init__(self, *args, **kw):
         super().__init__(*args, **kw)
@@ -151,7 +148,9 @@ class PasswordRestForm(PasswordResetForm):
         else:
             site_name = domain = domain_override
 
-        send_reset_email.apply_async(args=(to_email, domain, site_name, use_https, subject_template_name, email_template_name, from_email, html_email_template_name))
+        send_reset_email.apply_async(args=(
+            to_email, domain, site_name, use_https, subject_template_name, email_template_name, from_email,
+            html_email_template_name))
         # for user in users:
         #
         #     context = {
@@ -202,6 +201,7 @@ class SetPasswordForm(setPasswordForm):
             Submit('submit', 'Set new password'),
         )
 
+
 class SignInForm(AuthenticationForm):
     # email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
     # password1 = forms.CharField(
@@ -234,6 +234,51 @@ class SignInForm(AuthenticationForm):
                 Column('password', css_class='form-group col-md-6 mb-0'),
                 css_class='form-row'
             ),
+            # Row(
+            #     Column('password2', css_class='form-group col-md-6 mb-0'),
+            #     css_class='form-row'
+            # ),
+            Submit('submit', 'Create')
+        )
+
+
+class UserChangeForm(forms.ModelForm):
+    avatar = forms.FileField(required=False, label=_('Avatar'), help_text=_('Avatar image'))
+    email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    # password1 = forms.CharField(
+    #     # label=_("Password"),
+    #     strip=False,
+    #     widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
+    #     # help_text=password_validation.password_validators_help_text_html(),
+    # )
+    # password2 = forms.CharField(
+    #     # label=_("Password confirmation"),
+    #     widget=forms.PasswordInput(attrs={'placeholder': 'Password confirmation'}),
+    #     strip=False,
+    #     help_text=_("Enter the same password as before, for verification."),
+    # )
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'avatar')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = True
+        self.helper.layout = Layout(
+            Row(
+                Column('username', css_class='form-group col-md-5 mb-0'),
+                Column('email', css_class='form-group col-md-5 mb-0'),
+                Column('avatar', css_class='form-group col-md-2 mb-0'),
+                css_class='form-row'
+            ),
+            # Row(
+            #     Column('password1', css_class='form-group col-md-6 mb-0'),
+            #     Column('password2', css_class='form-group col-md-6 mb-0'),
+            #     css_class='form-row'
+            # ),
             # Row(
             #     Column('password2', css_class='form-group col-md-6 mb-0'),
             #     css_class='form-row'

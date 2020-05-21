@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{#{% load crispy_forms_tags %}#}
+
+{% block content %}
+
+
+    <div class="container marketing">
+
+        <!-- Three columns of text below the carousel -->
+        <div class="row">
+
+          <div class="col-lg-4 offset-md-3  ">
+            <img class="rounded-circle" src="{{ user.avatar.url }}" alt="Generic placeholder image" width="140" height="140">
+            <h2>{{ user.username }}</h2>
+            <p>{{ user.email }}</p>
+              {% if user.id == request.user.id %}
+            <p><a class="btn btn-primary" href="{% url 'users:change' %}" role="button">Change</a></p>
+              {% endif %}
+          </div><!-- /.col-lg-4 -->
+
+        </div>
+
+        <!-- START THE FEATURETTES -->
+
+
+
+
+      </div>
+
+{% endblock %}

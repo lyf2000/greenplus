@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+
+
+
+<h1>Meeting {{ meet.title }}: {{ meet.get_normal_time }} </h1>
+<div id="map"></div>
+
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js">
+
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        var lat = {{ meet.lat }};
+        var lng = {{ meet.lng }};
+        var position = {"lat": lat, "lng": lng};
+        addCurrnetMeetMarker(position);
+    });
+
+</script>
+<script async defer
+
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1GfHWxr871lHDL299zxsgFVjgnqE4e1s&callback=initMap&region=RU">
+</script>
+
+
+{% endblock %}

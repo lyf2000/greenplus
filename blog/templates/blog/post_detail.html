@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    <div class="card card-cascade wider reverse">
+
+    <!-- Card image -->
+    <div class="view view-cascade overlay">
+        <img class="card-img-top" src="{{ post.main_img.url }}"
+             alt="Card image cap">
+        <a href="#">
+            <div class="mask rgba-white-slight"></div>
+        </a>
+    </div>
+</div>
+
+
+
+  <div class="card-deck mb-3">
+        <div class="card-body">
+            <div class="card-body card-body-cascade text-center">
+
+                <!-- Title -->
+                <h4 class="card-title"><strong>{{ post.title }}</strong></h4>
+                <!-- Subtitle -->
+                <h6 class="font-weight-bold indigo-text py-2">{{ post.get_normal_time }}</h6>
+                <!-- Text -->
+                <p class="card-text">{{ post.text }}</p>
+
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script>
+        $(document).ready(() => {
+
+
+        })
+    </script>
+
+
+
+{% endblock %}

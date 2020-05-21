@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block links %}
+
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
+
+{% endblock %}
+
+{% block content %}
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+
+    <h3> Meet create</h3>
+
+    {% crispy form %}
+
+    <div id="map" class="mt-5"></div>
+
+{% endblock %}
+
+{% block js %}
+
+    <script>
+        $(document).ready(function () {
+            var lat = 55.796289;
+            var lng = 49.108795;
+            var position = {"lat": lat, "lng": lng};
+            addCurrnetMeetMarker(position);
+        });
+
+    </script>
+
+    <script async defer
+
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1GfHWxr871lHDL299zxsgFVjgnqE4e1s&callback=initMap&region=RU">
+    </script>
+
+{% endblock %}

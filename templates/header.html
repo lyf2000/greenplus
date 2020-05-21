@@ -1,0 +1,22 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="{% url 'home' %}">Green+</a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+        <a class="nav-link text-light" href="{% url 'home' %}">Home</a>
+            {% if request.user.is_authenticated %}
+        <a class="text-light btn my-2 my-sm-0 bg-success" href="{% url 'users:logout' %}" type="submit">
+            Logout
+            {% else %}
+        <a class="text-light btn my-2 my-sm-0 bg-success btn-link" href="{% url 'users:login' %}" type="submit">
+            Login
+            {% endif %}
+        </a>
+    </div>
+</nav>

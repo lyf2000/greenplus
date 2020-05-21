@@ -1,0 +1,42 @@
+{% extends 'admin/change_form.html' %}
+
+
+{% load static %}
+
+{% block extrahead %}{{ block.super }}
+<script src="{% static 'js/3.4.1_jquery.js' %}"></script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+
+
+<script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js">
+
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1GfHWxr871lHDL299zxsgFVjgnqE4e1s&callback=initMap&region=RU">
+</script>
+<script type="text/javascript" src="{% static 'js/mapAdmin.js' %}"></script>
+
+{% endblock %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+{% endblock %}
+
+
+{% block admin_change_form_document_ready %}{{ block.super }}
+<script>
+    $('document').ready(function() {
+        var lat = {{ original.lat }};
+        var lng = {{ original.lng }};
+        var position = {"lat": lat, "lng": lng};
+        addCurrnetMeetMarker(position);
+        
+    })
+</script>
+{% endblock %}

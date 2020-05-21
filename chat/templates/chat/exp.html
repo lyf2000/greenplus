@@ -1,0 +1,63 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+
+
+    <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
+    <input id="chat-message-input" type="text" size="100"/><br/>
+    <input id="chat-message-submit" type="button" value="Send"/>
+
+{% endblock %}
+
+{% block extra_js %}{{ block.super }}
+
+    <script>
+
+        ws = 'ws://' + document.location.host + '/ws/chat/';
+        console.log('conn to', ws);
+        socket = new ReconnectingWebSocket(ws);
+
+
+        socket.onopen = function (e) {
+            console.log('Connect successful!')
+        };
+
+        socket.onmessage = function (e) {
+            console.log('receive', e);
+            var data = JSON.parse(e.data);
+            var message = data['message'];
+            document.querySelector('#chat-log').value += (message + '\n');
+        };
+
+        socket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function (e) {
+            var messageInputDom = document.querySelector('#chat-message-input');
+            var message = messageInputDom.value;
+            socket.send(JSON.stringify({
+                'chat_id': 'notify_user_1',
+                'message': message,
+                'command': 'send_chat'
+            }));
+
+            messageInputDom.value = '';
+        };
+
+
+        // ===========
+
+
+    </script>
+
+
+
+{% endblock %}

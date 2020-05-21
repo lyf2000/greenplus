@@ -3,11 +3,11 @@
 
 {% block content %}
 
-    <h1 class="mb-4 ">Meetings</h1>
+    <h1 class="mb-4 ">Posts</h1>
 
     {% for post in post_list %}
     <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action">
+        <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
             <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{ post.title }}</h5>
 {#                <small>3 days ago</small>#}

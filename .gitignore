@@ -283,3 +283,4 @@ selenium-debug.log
 *.dat
 *.dir
 *.rdb
+staticfiles

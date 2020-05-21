@@ -17,11 +17,16 @@ class Post(models.Model):
 
     main_img = models.ImageField(upload_to='uploads/%Y/%m/%d/', null=True, blank=True)
 
+    ordering=('-created',)
+
     def __str__(self):
         return f'Post: {self.title}'
 
     def get_normal_time(self):
         return self.created.strftime('%b %d, %Y')
+
+    def get_absolute_url(self):
+        return reverse_lazy('blog:post-detail', args=[self.pk])
 
 
 class Meet(models.Model):
@@ -38,7 +43,7 @@ class Meet(models.Model):
     ordering = ['-meet_date']
 
     def __str__(self):
-        return f'Meet({self.pk}): ({self.lat}; {self.lng})'
+        return f'Meet {self.title}'
 
     def get_normal_time(self):
         return self.meet_date.strftime('%Y-%m-%d %H:%M')

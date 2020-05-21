@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.staticfiles.urls import static
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from rest_framework_swagger.views import get_swagger_view
 from users.views import already_logined
 from . import settings
+from django.views.static import serve
+
 
 schema_view = get_swagger_view(title='Pastebin API')
 
@@ -38,11 +40,14 @@ urlpatterns = [
                   path('', include('users.urls')),
                   # path('chat/', include('chat.urls')),
                   path('swag/', schema_view),
+                  re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+                  re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
 
               ] + api_urlpatterns
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = 'blog.views.e_handler404'
 handler500 = 'blog.views.e_handler500'

@@ -50,6 +50,7 @@ class MeetListView(ListView):
 
 class PostListView(ListView):
     model = Post
+    queryset = Post.objects.order_by('-created')
     template_name = 'blog/post-list.html'
 
 

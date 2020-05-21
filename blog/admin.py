@@ -91,8 +91,10 @@ class PostAdmin(admin.ModelAdmin):
             '<img src="{url}" width="{width}" height={height} />'
                 .format(
                 url=os.path.join('media/', obj.main_img.url),
-                width=obj.main_img.width,
-                height=obj.main_img.height,
+                # width=obj.main_img.width,
+                # height=obj.main_img.height,
+                height=550,
+                width=800,
             ))
 
     def added_count(self, obj):

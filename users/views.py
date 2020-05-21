@@ -10,7 +10,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
 
-from users.forms import SignupForm, PasswordRestForm, SetPasswordForm, SignInForm
+from users.forms import SignupForm, PasswordRestForm, SetPasswordForm, SignInForm, UserChangeForm
 from users.models import User
 from users.tasks import send_register_confirmation_email
 from users.tokens import account_activation_token
@@ -100,3 +100,19 @@ class PasswordResetDoneView(passwordResetDoneView):
 
 class PasswordResetCompleteView(passwordResetCompleteView):
     template_name = 'users/password_reset_complete.html'
+
+
+def change_user(request):
+    if request.method == 'POST':
+        user = UserChangeForm(request.POST, request.FILES, instance=request.user)
+        if user.is_valid():
+            user.save()
+            # redirect(reverse())
+        else:
+            return render(request, 'users/user-change.html', {'form': user})
+    user = request.user
+    form = UserChangeForm(initial={
+        'username': user.username,
+        'email': user.email
+    })
+    return render(request, 'users/user-change.html', {'form': form})

@@ -241,4 +241,47 @@ class SignInForm(AuthenticationForm):
             Submit('submit', 'Create')
         )
 
-# class UserChangeForm(userChangeForm):
+
+class UserChangeForm(forms.ModelForm):
+    avatar = forms.FileField(required=False, label=_('Avatar'), help_text=_('Avatar image'))
+    email = forms.CharField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    # password1 = forms.CharField(
+    #     # label=_("Password"),
+    #     strip=False,
+    #     widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
+    #     # help_text=password_validation.password_validators_help_text_html(),
+    # )
+    # password2 = forms.CharField(
+    #     # label=_("Password confirmation"),
+    #     widget=forms.PasswordInput(attrs={'placeholder': 'Password confirmation'}),
+    #     strip=False,
+    #     help_text=_("Enter the same password as before, for verification."),
+    # )
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'avatar')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = True
+        self.helper.layout = Layout(
+            Row(
+                Column('username', css_class='form-group col-md-5 mb-0'),
+                Column('email', css_class='form-group col-md-5 mb-0'),
+                Column('avatar', css_class='form-group col-md-2 mb-0'),
+                css_class='form-row'
+            ),
+            # Row(
+            #     Column('password1', css_class='form-group col-md-6 mb-0'),
+            #     Column('password2', css_class='form-group col-md-6 mb-0'),
+            #     css_class='form-row'
+            # ),
+            # Row(
+            #     Column('password2', css_class='form-group col-md-6 mb-0'),
+            #     css_class='form-row'
+            # ),
+            Submit('submit', 'Create')
+        )
